@@ -111,23 +111,23 @@ In this project:
 ## 4. Software Architecture
 
 The project follows a **modular architecture** with clear separation of concerns.
+```mermaid
+flowchart LR
+    User[User Input] --> Main[main.py]
 
-sir_epidemic_model/
-│
-├── model.py # Mathematical SIR equations
-├── solver.py # Euler numerical method
-├── simulation.py # Simulation loop over time
-├── visualization.py # Plotting and visualization
-├── main.py # Entry point (run this file)
-│
-├── tests/
-│ └── test_model.py # Unit tests
-│
-├── README.md
-└── requirements.txt
+    Main --> Simulation[simulation.py]
+    Simulation --> Solver[solver.py]
+    Solver --> Model[model.py]
 
+    Model --> Solver
+    Solver --> Simulation
+    Simulation --> Visualization[visualization.py]
+
+    Visualization --> Plot[SIR Curve Output]
 
 
+
+```
 
 ### 4.1 Design Rationale
 
@@ -206,41 +206,76 @@ pip install -r requirements.txt
 2.Run the Simulation
 
 python main.py
+```
+Example input:
+```
 
-3.Example input 
-
-Total population: 900
-Initatial infected individuals: 10
+Total population: 1000
+Initial infected individuals: 10
 Infection rate (beta): 0.47
 Recovery rate (gamma): 0.09
 Simulation days: 120
 
+```
+A plot of the epidemic dynamics will be displayed.
+
+Testing
+
+Unit tests verify population conservation, a core property of the SIR model:
+
+𝑆
+(
+𝑡
+)
++
+𝐼
+(
+𝑡
+)
++
+𝑅
+(
+𝑡
+)
+=
+𝑁
+S(t)+I(t)+R(t)=N
+
+---
+Run tests with:
+```
+
+pytest
+```
+---
+## 8. Limitations
+
+- No explicit mortality modeling
+- No incubation period (SEIR not included)
+- Homogeneous mixing assumption
+- Deterministic (no randomness)
+
+These simplifications are intentional and appropriate for an educational model.
+---
+## 9. Use of Large Language Models (LLMs)
+
+- Large Language Models were used as a support tool to:
+- verify mathematical formulations,
+- assist in code structuring,
+- improve documentation clarity.
+- All outputs were reviewed and validated to ensure correctness and understanding.
+
+---
+## Conclusion
+
+This project demonstrates how epidemiological theory, numerical methods,
+and modular software design can be combined to create a working and
+interpretable disease spread simulator.
+
+The SIR model provides clear insights into Ebola outbreak dynamics
+while remaining simple and transparent.
 
 
-#Use of Large Language Models (LLMs)
-
-Large Language Models were used as a support tool during development to:
-
-verify the mathematical formulation of the SIR model,
-
-assist in structuring modular Python code,
-
-improve documentation clarity.
-
-All generated content was reviewed, adapted, and validated by the authors.
-The final implementation reflects the authors’ understanding and design decisions.
+---
 
 
-#Limitations
-
-This model is intentionally simplified and does not include:
-
-explicit mortality,
-
-incubation periods,
-
-behavioral changes or interventions,
-
-stochastic effects.
-
-The project is intended for educational and illustrative purposes, not for real-world outbreak prediction.
